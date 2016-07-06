@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="UTF-8">
+
+      <title> Log In</title>
+      <link rel="stylesheet" href="../css/login.css">
+      <link rel="stylesheet" type="text/css" href="../css/global.css">
+      <link rel="stylesheet" type="text/css" href="../css/home.css">
+
+      <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+      <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+
+  </head>
+
+  <body>
+
+    <!--Google Font - Work Sans-->
+    <link href='https://fonts.googleapis.com/css?family=Work+Sans:400,300,700' rel='stylesheet' type='text/css'>
+
+
+  <p id=demo>
+  </p>
+
+
+  <div class="container">
+    <div class="profile">
+      <button class="profile__avatar" id="toggleProfile">
+       <img src="https://pbs.twimg.com/profile_images/507231357135630336/6KNrJ8jN.jpeg" alt="Avatar" />
+      </button>
+      <div class="profile__form">
+        <div class="profile__fields">
+          <div class="field">
+            <input type="text" id="fieldUser" class="input" required pattern=.*\S.* />
+            <label for="fieldUser" class="label">Username</label>
+          </div>
+          <div class="field">
+            <input type="password" id="fieldPassword" class="input" required pattern=.*\S.* />
+            <label for="fieldPassword" class="label">Password</label>
+          </div>
+          <div class="profile__footer">
+
+
+          <button class="btn" id="create_button">
+           Create User
+         </button>
+
+         <script>
+         document.getElementById("create_button").addEventListener("click", createUserFunc);
+
+         function createUserFunc(){
+           var ref = new Firebase("smarterplogin.firebaseio.com");
+           var fieldUser = document.getElementById('fieldUser').value;
+          var fieldPassword = document.getElementById('fieldPassword').value;
+
+          ref.createUser({
+            email    : fieldUser,
+            password : fieldPassword
+          }, function(error, userData) {
+            if (error) {
+              console.log("Error creating user:", error);
+            } else {
+              console.log("Successfully created user account with uid:", userData.uid);
+            }
+          });
+        }
+         </script>
+
+         <button class="btn" id="log_button">
+         Login
+         <button>
+
+         <script>
+                      document.getElementById("log_button").addEventListener("click", loginUser);
+
+                        function loginUser(){
+
+                          var ref = new Firebase("https://smarterplogin.firebaseio.com");
+                          var fieldUser = document.getElementById('fieldUser').value;
+                          var fieldPassword = document.getElementById('fieldPassword').value;
+
+                          ref.authWithPassword({
+                            email: fieldUser,
+                            password: fieldPassword
+                          }, function(error, authData) {
+                            if (error) {
+                              console.log("Login Failed!", error);
+                            } else {
+                              console.log("Authenticated successfully with payload:", authData);
+                            }
+                          });
+                          }
+          </script>
+          </div>
+        </div>
+       </div>
+    </div>
+  </div>
+
+
+  <script src="../js/login.js"></script>
+
+
+  </body>
+</html>
